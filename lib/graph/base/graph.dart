@@ -4,7 +4,6 @@ import 'relation.dart';
 /// Graph is an abstract class that defines common interfaces required from a
 /// graph. Everything that has to do with managing Nodes and Relations.
 abstract class Graph {
-
   /// Add a new Node to graph
   void addNode(Node node, {bool replaceIfExists = true});
 

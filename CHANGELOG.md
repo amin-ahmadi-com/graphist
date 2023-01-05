@@ -1,3 +1,7 @@
+## 0.2.5
+
+* Example added
+
 ## 0.2.4
 
 * Added icons

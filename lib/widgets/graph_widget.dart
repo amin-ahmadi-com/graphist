@@ -54,8 +54,7 @@ class _GraphWidgetState extends State<GraphWidget> {
 
       return NodeWidget(
         rect: ctl.getNodeRect(node.id)!,
-        // Calculate icon from type and subtype
-        icon: const Icon(Icons.circle),
+        icon: IconData(node.icon.codePoint, fontFamily: node.icon.fontFamily),
         label: Text(node.label),
         onPressed: () async {
           if (ctl.nodeIsExpanded(node.id)) {

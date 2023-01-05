@@ -2,7 +2,7 @@ import 'package:flutter/material.dart';
 
 class NodeWidget extends StatefulWidget {
   final Rect rect;
-  final Widget? icon;
+  final IconData icon;
   final Widget label;
   final VoidCallback? onPressed;
   final VoidCallback? onSecondaryTap;
@@ -56,7 +56,7 @@ class _NodeWidgetState extends State<NodeWidget> {
                 borderRadius: BorderRadius.all(Radius.circular(10)),
               ),
             ),
-            icon: widget.icon ?? const Icon(Icons.circle),
+            icon: Icon(widget.icon),
             label: widget.label,
             onPressed: widget.onPressed,
             onLongPress: widget.onLongPress,

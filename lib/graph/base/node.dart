@@ -22,12 +22,16 @@ class Node {
   /// A property key within properties that contains a launchable URL (web address).
   final String? urlProperty;
 
+  /// Node icon
+  final NodeIcon icon;
+
   Node({
     required this.type,
     required this.properties,
     required this.labelProperty,
     required this.uniqueProperty,
     required this.urlProperty,
+    this.icon = const NodeIcon(), // Material icon for circle
   });
 
   /// Identifier of this Node. It's a combination of Node type and its unique
@@ -61,6 +65,7 @@ class Node {
       labelProperty: json["labelProperty"],
       uniqueProperty: json["uniqueProperty"],
       urlProperty: json["urlProperty"],
+      icon: NodeIcon.fromJson(json["icon"]),
     );
   }
 
@@ -71,6 +76,7 @@ class Node {
         "labelProperty": labelProperty,
         "uniqueProperty": uniqueProperty,
         "urlProperty": urlProperty,
+        "icon": icon.toJson(),
       };
 
   /// Relatives of this node that can be generated if/when needed.
@@ -83,4 +89,41 @@ class Node {
   String toString() {
     return jsonEncode(toJson());
   }
+}
+
+/// NodeIcon is
+class NodeIcon {
+  final String fontFamily;
+  final int codePoint;
+
+  const NodeIcon({this.fontFamily = "MaterialIcons", this.codePoint = 0xe163});
+
+  /// Construct a NodeIcon from a JSON object.
+  factory NodeIcon.fromJson(dynamic json) {
+    return NodeIcon(
+      fontFamily: json["fontFamily"],
+      codePoint: json["codePoint"],
+    );
+  }
+
+  /// Create JSON serializable representation of this NodeIcon.
+  dynamic toJson() => {
+        "fontFamily": fontFamily,
+        "codePoint": codePoint,
+      };
+
+  @override
+  String toString() {
+    return toJson().toString();
+  }
+
+  @override
+  bool operator ==(Object other) {
+    return other is NodeIcon &&
+        other.fontFamily == fontFamily &&
+        other.codePoint == codePoint;
+  }
+
+  @override
+  int get hashCode => toString().hashCode;
 }

@@ -1,6 +1,6 @@
 name: graphist
 description: Graphs represent a different perspective on data by using nodes and relations between them. Graphist let's you add graph capabilities to Flutter applications.
-version: 0.2.3
+version: 0.2.4
 homepage: https://github.com/amin-ahmadi-com/graphist
 
 environment:

@@ -1,3 +1,7 @@
+## 0.2.4
+
+* Added icons
+
 ## 0.2.3
 
 * Documentation and examples

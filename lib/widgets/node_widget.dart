@@ -1,5 +1,3 @@
-library graphist;
-
 import 'package:flutter/material.dart';
 
 class NodeWidget extends StatefulWidget {

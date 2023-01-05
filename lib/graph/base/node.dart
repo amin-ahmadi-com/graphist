@@ -1,5 +1,3 @@
-library graphist;
-
 import 'dart:convert';
 
 import 'package:tuple/tuple.dart';

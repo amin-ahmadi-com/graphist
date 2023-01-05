@@ -1,5 +1,3 @@
-library graphist;
-
 /// Base class of all Relations between Nodes.
 class Relation {
   /// Type of Relation

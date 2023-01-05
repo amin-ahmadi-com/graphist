@@ -1,5 +1,3 @@
-library graphist;
-
 import 'package:flutter/material.dart';
 
 import '../graph/base/node.dart';

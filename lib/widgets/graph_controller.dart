@@ -1,5 +1,3 @@
-library graphist;
-
 import 'package:flutter/cupertino.dart';
 
 import '../graph/base/node.dart';

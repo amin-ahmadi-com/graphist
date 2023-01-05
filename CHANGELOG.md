@@ -1,3 +1,7 @@
+## 0.2.2
+
+* dartdoc issues fixed
+
 ## 0.2.1
 
 * LICENSE fixed/updated

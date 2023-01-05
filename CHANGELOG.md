@@ -1,3 +1,7 @@
+## 0.2.3
+
+* Documentation and examples
+
 ## 0.2.2
 
 * dartdoc issues fixed

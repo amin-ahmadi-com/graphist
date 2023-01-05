@@ -78,6 +78,7 @@ class Node {
   /// Relation either starts or ends at this Node.
   Future<Iterable<Tuple2<Relation, Node>>> get relatives async => [];
 
+  /// Generates a string of the JSON output of this node
   @override
   String toString() {
     return jsonEncode(toJson());

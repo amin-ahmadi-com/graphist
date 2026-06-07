@@ -52,9 +52,9 @@ class _GraphWidgetState extends State<GraphWidget> {
         nodeColor = Colors.lightGreen;
       }
 
-      return NodeWidget(
+       return NodeWidget(
         rect: ctl.getNodeRect(node.id)!,
-        icon: IconData(node.icon.codePoint, fontFamily: node.icon.fontFamily),
+        icon: node.icon.iconWidget,
         label: Text(node.label),
         onPressed: () async {
           if (ctl.nodeIsExpanded(node.id)) {

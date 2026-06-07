@@ -1,5 +1,6 @@
 import 'dart:convert';
 
+import 'package:flutter/material.dart' as flutter;
 import 'package:tuple/tuple.dart';
 
 import 'relation.dart';
@@ -97,6 +98,9 @@ class NodeIcon {
   final int codePoint;
 
   const NodeIcon({this.fontFamily = "MaterialIcons", this.codePoint = 0xe163});
+
+  // ignore: non_const_argument_for_const_parameter
+  flutter.IconData get iconWidget => flutter.IconData(codePoint, fontFamily: fontFamily);
 
   /// Construct a NodeIcon from a JSON object.
   factory NodeIcon.fromJson(dynamic json) {

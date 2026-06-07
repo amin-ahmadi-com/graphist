@@ -1,3 +1,9 @@
+## 0.3.0
+
+* Updated SDK constraints to Dart 3.0+ and Flutter 3.0+.
+* Expanded README with comprehensive usage instructions and examples.
+* Added extensive test suite for `InMemoryGraph`.
+
 ## 0.2.5
 
 * Example added

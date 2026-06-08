@@ -7,6 +7,7 @@ export 'graph/base/relation.dart';
 
 // Graph Implementations
 export 'graph/graph_implementations/in_memory_graph.dart';
+export 'graph/graph_implementations/sqlite_graph.dart';
 
 // Widgets
 export 'widgets/graph_controller.dart';

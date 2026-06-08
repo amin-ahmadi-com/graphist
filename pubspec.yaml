@@ -11,6 +11,7 @@ dependencies:
   flutter:
     sdk: flutter
   path: ^1.8.2
+  sqlite3: ^2.5.0
   tuple: ^2.0.0
 
 dev_dependencies:

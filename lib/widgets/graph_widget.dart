@@ -48,11 +48,13 @@ class _GraphWidgetState extends State<GraphWidget> {
     final nodeWidgets = ctl.displayedNodes().map<Widget>((node) {
       var nodeColor = Colors.blueGrey;
 
-      if (ctl.getRelationsFrom(node.id).isNotEmpty) {
+      if (ctl
+          .getRelationsFrom(node.id)
+          .isNotEmpty) {
         nodeColor = Colors.lightGreen;
       }
 
-       return NodeWidget(
+      return NodeWidget(
         rect: ctl.getNodeRect(node.id)!,
         icon: node.icon.iconWidget,
         label: Text(node.label),
@@ -88,7 +90,7 @@ class _GraphWidgetState extends State<GraphWidget> {
       var relColor = Colors.grey;
       double relWidth = 2;
 
-      if (ctl.nodeIsLeaf(relation.toNodeId)) {
+      if (ctl.nodeIsNotLeaf(relation.toNodeId)) {
         relColor = Colors.lightGreen;
         relWidth = 5;
       }
@@ -118,10 +120,10 @@ class _GraphWidgetState extends State<GraphWidget> {
             ),
             child: Text(
               AngleUtils.directionFromAngle(
-                        ctl.getNodeRect(e.fromNodeId)!.center,
-                        ctl.getNodeRect(e.toNodeId)!.center,
-                      ) ==
-                      TextDirection.leftToRight
+                ctl.getNodeRect(e.fromNodeId)!.center,
+                ctl.getNodeRect(e.toNodeId)!.center,
+              ) ==
+                  TextDirection.leftToRight
                   ? "${e.label} 🢂"
                   : "🢀 ${e.label}",
               softWrap: false,

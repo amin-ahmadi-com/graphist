@@ -50,12 +50,16 @@ class InMemoryGraph extends Graph {
 
   @override
   bool nodeExists(String nodeId) {
-    return _nodes.where((node) => node.id == nodeId).isNotEmpty;
+    return _nodes
+        .where((node) => node.id == nodeId)
+        .isNotEmpty;
   }
 
   @override
   bool relationExists(String relationId) {
-    return _relations.where((relation) => relation.id == relationId).isNotEmpty;
+    return _relations
+        .where((relation) => relation.id == relationId)
+        .isNotEmpty;
   }
 
   @override
@@ -72,7 +76,7 @@ class InMemoryGraph extends Graph {
   bool nodeIsConnected(String nodeId) {
     return _relations
         .where((relation) =>
-            relation.toNodeId == nodeId || relation.fromNodeId == nodeId)
+    relation.toNodeId == nodeId || relation.fromNodeId == nodeId)
         .isNotEmpty;
   }
 
@@ -80,7 +84,7 @@ class InMemoryGraph extends Graph {
   bool nodeIsLeaf(String nodeId) {
     return _relations
         .where((relation) => relation.fromNodeId == nodeId)
-        .isNotEmpty;
+        .isEmpty;
   }
 
   @override
@@ -99,14 +103,14 @@ class InMemoryGraph extends Graph {
     List<Relation> side1, side2;
     side1 = _relations
         .where((relation) =>
-            relation.toNodeId == toNodeId && relation.fromNodeId == fromNodeId)
+    relation.toNodeId == toNodeId && relation.fromNodeId == fromNodeId)
         .toList(growable: false);
 
     if (bothDirections) {
       side2 = _relations
           .where((relation) =>
-              relation.fromNodeId == toNodeId &&
-              relation.toNodeId == fromNodeId)
+      relation.fromNodeId == toNodeId &&
+          relation.toNodeId == fromNodeId)
           .toList(growable: false);
     } else {
       side2 = [];

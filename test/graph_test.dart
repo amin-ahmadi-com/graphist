@@ -89,7 +89,7 @@ void main() {
 
       expect(graph.nodeIsConnected(node1.id), true);
       expect(graph.nodeIsConnected(node2.id), true);
-      expect(graph.nodeIsLeaf(node1.id), true); //’nodeIsLeaf’ in InMemoryGraph means it has outgoing relations
+       expect(graph.nodeIsLeaf(node1.id), false);
     });
 
     test("getRelationsBetween", () {

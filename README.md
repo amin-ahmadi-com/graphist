@@ -18,7 +18,7 @@ Add `graphist` to your `pubspec.yaml`:
 
 ```yaml
 dependencies:
-  graphist: ^0.3.0
+  graphist: ^0.3.1
 ```
 
 ### Basic Usage

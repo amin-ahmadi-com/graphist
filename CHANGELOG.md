@@ -1,3 +1,9 @@
+## 0.3.2
+
+* Fixed `nodeIsLeaf` — now correctly returns `true` when a node has no outgoing relations (i.e., it is a terminal leaf node)
+* Fixed `getRelationsBetween` signature to match the `Graph` interface
+* Updated README with comprehensive usage instructions
+
 ## 0.3.1
 
 * Added Relation tests.

@@ -29,7 +29,9 @@ void main() {
     test("addNode and allNodes", () {
       graph.addNode(node1);
       graph.addNode(node2);
-      expect(graph.allNodes().length, 2);
+      expect(graph
+          .allNodes()
+          .length, 2);
       expect(graph.nodeExists("User-1"), true);
       expect(graph.nodeExists("User-2"), true);
     });
@@ -56,7 +58,9 @@ void main() {
         labelProperty: "strength",
       );
       graph.addRelation(rel);
-      expect(graph.allRelations().length, 1);
+      expect(graph
+          .allRelations()
+          .length, 1);
       expect(graph.relationExists(rel.id), true);
     });
 
@@ -71,8 +75,12 @@ void main() {
         labelProperty: "strength",
       );
       graph.addRelation(rel);
-      expect(graph.getRelationsFrom(node1.id).length, 1);
-      expect(graph.getRelationsTo(node2.id).length, 1);
+      expect(graph
+          .getRelationsFrom(node1.id)
+          .length, 1);
+      expect(graph
+          .getRelationsTo(node2.id)
+          .length, 1);
     });
 
     test("nodeIsConnected and nodeIsLeaf", () {
@@ -89,7 +97,10 @@ void main() {
 
       expect(graph.nodeIsConnected(node1.id), true);
       expect(graph.nodeIsConnected(node2.id), true);
-       expect(graph.nodeIsLeaf(node1.id), false);
+      expect(graph.nodeIsLeaf(node1.id),
+          false); // node1 has outgoing relations ('Knows')
+      expect(graph.nodeIsLeaf(node2.id),
+          true); // node2 is a terminal leaf (no outgoing relations)
     });
 
     test("getRelationsBetween", () {
@@ -104,17 +115,55 @@ void main() {
       );
       graph.addRelation(rel);
 
-      expect(graph.getRelationsBetween(node1.id, node2.id).length, 1);
+      expect(graph
+          .getRelationsBetween(node1.id, node2.id)
+          .length, 1);
+    });
+
+    test("getRelationsBetween with bothDirections", () {
+      graph.addNode(node1);
+      graph.addNode(node2);
+      final rel1 = Relation(
+        type: "Knows",
+        fromNodeId: node1.id,
+        toNodeId: node2.id,
+        properties: {"strength": "high"},
+        labelProperty: "strength",
+      );
+      final rel2 = Relation(
+        type: "Follows",
+        fromNodeId: node2.id,
+        toNodeId: node1.id,
+        properties: {"strength": "low"},
+        labelProperty: "strength",
+      );
+      graph.addRelation(rel1);
+      graph.addRelation(rel2);
+
+      expect(graph
+          .getRelationsBetween(node1.id, node2.id, bothDirections: true)
+          .length, 2);
+      expect(graph
+          .getRelationsBetween(node1.id, node2.id, bothDirections: false)
+          .length, 1);
     });
 
     test("clear", () {
       graph.addNode(node1);
       graph.addRelation(
-        Relation(type: "T", fromNodeId: "A", toNodeId: "B", properties: {}, labelProperty: "L"),
+        Relation(type: "T",
+            fromNodeId: "A",
+            toNodeId: "B",
+            properties: {},
+            labelProperty: "L"),
       );
       graph.clear();
-      expect(graph.allNodes().length, 0);
-      expect(graph.allRelations().length, 0);
+      expect(graph
+          .allNodes()
+          .length, 0);
+      expect(graph
+          .allRelations()
+          .length, 0);
     });
   });
 }

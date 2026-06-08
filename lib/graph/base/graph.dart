@@ -60,5 +60,6 @@ abstract class Graph {
   Iterable<Relation> allRelations();
 
   /// Get relations from a given node to another (by id)
-  Iterable<Relation> getRelationsBetween(String fromNodeId, String toNodeId);
+  Iterable<Relation> getRelationsBetween(String fromNodeId, String toNodeId,
+      {bool bothDirections = true});
 }

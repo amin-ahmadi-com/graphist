@@ -1,3 +1,10 @@
+## 0.4.0
+
+* Added `SqliteGraph` — a persistent graph implementation backed by SQLite with support for nodes, relations, and key-value properties
+* Restructured folders
+* Added more and better unit tests
+* Bug fixes
+
 ## 0.3.2
 
 * Fixed `nodeIsLeaf` — now correctly returns `true` when a node has no outgoing relations (i.e., it is a terminal leaf node)

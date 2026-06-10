@@ -8,6 +8,9 @@ class InMemoryGraph extends Graph {
 
   @override
   void addNode(Node node, {bool replaceIfExists = true}) {
+    if (!replaceIfExists && nodeExists(node.id)) {
+      return;
+    }
     if (replaceIfExists) {
       removeNode(node.id);
     }
@@ -16,6 +19,9 @@ class InMemoryGraph extends Graph {
 
   @override
   void addRelation(Relation relation, {bool replaceIfExists = true}) {
+    if (!replaceIfExists && relationExists(relation.id)) {
+      return;
+    }
     if (replaceIfExists) {
       removeRelation(relation.id);
     }
@@ -50,16 +56,12 @@ class InMemoryGraph extends Graph {
 
   @override
   bool nodeExists(String nodeId) {
-    return _nodes
-        .where((node) => node.id == nodeId)
-        .isNotEmpty;
+    return _nodes.where((node) => node.id == nodeId).isNotEmpty;
   }
 
   @override
   bool relationExists(String relationId) {
-    return _relations
-        .where((relation) => relation.id == relationId)
-        .isNotEmpty;
+    return _relations.where((relation) => relation.id == relationId).isNotEmpty;
   }
 
   @override
@@ -76,15 +78,14 @@ class InMemoryGraph extends Graph {
   bool nodeIsConnected(String nodeId) {
     return _relations
         .where((relation) =>
-    relation.toNodeId == nodeId || relation.fromNodeId == nodeId)
+            relation.toNodeId == nodeId || relation.fromNodeId == nodeId)
         .isNotEmpty;
   }
 
   @override
   bool nodeIsLeaf(String nodeId) {
-    return _relations
-        .where((relation) => relation.fromNodeId == nodeId)
-        .isEmpty;
+    return _relations.any((relation) => relation.toNodeId == nodeId) &&
+        _relations.where((relation) => relation.fromNodeId == nodeId).isEmpty;
   }
 
   @override
@@ -103,14 +104,17 @@ class InMemoryGraph extends Graph {
     List<Relation> side1, side2;
     side1 = _relations
         .where((relation) =>
-    relation.toNodeId == toNodeId && relation.fromNodeId == fromNodeId)
+            relation.toNodeId == toNodeId && relation.fromNodeId == fromNodeId)
         .toList(growable: false);
 
     if (bothDirections) {
+      if (fromNodeId == toNodeId) {
+        return side1;
+      }
       side2 = _relations
           .where((relation) =>
-      relation.fromNodeId == toNodeId &&
-          relation.toNodeId == fromNodeId)
+              relation.fromNodeId == toNodeId &&
+              relation.toNodeId == fromNodeId)
           .toList(growable: false);
     } else {
       side2 = [];

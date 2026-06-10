@@ -28,6 +28,12 @@ abstract class Graph {
   /// Opposite of nodeIsConnected
   bool nodeIsDisconnected(String nodeId) => !nodeIsConnected(nodeId);
 
+  /// Check if a Node has no Relations to or from it.
+  bool nodeIsOrphan(String nodeId) => !nodeIsConnected(nodeId);
+
+  /// Opposite of nodeIsOrphan
+  bool nodeIsNotOrphan(String nodeId) => !nodeIsOrphan(nodeId);
+
   /// Remove a node from the graph (by id)
   void removeNode(String nodeId);
 

@@ -90,7 +90,8 @@ void main() {
       expect(retrieved.properties["name"], "Alice");
     });
 
-    test("addNode without replaceIfExists (default) replaces existing node", () {
+    test("addNode without replaceIfExists (default) replaces existing node",
+        () {
       graph.addNode(node1);
       final updatedNode = Node(
         type: "User",
@@ -185,7 +186,8 @@ void main() {
       expect(graph.relationExists("NonExistent"), false);
     });
 
-    test("addRelation with replaceIfExists true replaces existing relation", () {
+    test("addRelation with replaceIfExists true replaces existing relation",
+        () {
       graph.addNode(node1);
       graph.addNode(node2);
       final rel = Relation(
@@ -322,6 +324,30 @@ void main() {
       expect(graph.nodeIsConnected(node2.id), false);
     });
 
+    test("nodeIsOrphan returns true for node without relations", () {
+      graph.addNode(node1);
+      graph.addNode(node2);
+      final rel = Relation(
+        type: "Knows",
+        fromNodeId: node1.id,
+        toNodeId: node2.id,
+        properties: {"strength": "high"},
+        labelProperty: "strength",
+      );
+      graph.addRelation(rel);
+
+      expect(graph.nodeIsOrphan(node1.id), false);
+      expect(graph.nodeIsOrphan(node2.id), false);
+      expect(graph.nodeIsOrphan("User-3"), true);
+    });
+
+    test("nodeIsLeaf returns false for orphan node", () {
+      graph.addNode(node1);
+
+      expect(graph.nodeIsLeaf(node1.id), false);
+      expect(graph.nodeIsOrphan(node1.id), true);
+    });
+
     test("nodeIsLeaf returns false for non-leaf node", () {
       graph.addNode(node1);
       graph.addNode(node2);
@@ -375,7 +401,9 @@ void main() {
       graph.addRelation(rel2);
 
       expect(
-        graph.getRelationsBetween(node1.id, node2.id, bothDirections: true).length,
+        graph
+            .getRelationsBetween(node1.id, node2.id, bothDirections: true)
+            .length,
         2,
       );
     });
@@ -401,9 +429,29 @@ void main() {
       graph.addRelation(rel2);
 
       expect(
-        graph.getRelationsBetween(node1.id, node2.id, bothDirections: false).length,
+        graph
+            .getRelationsBetween(node1.id, node2.id, bothDirections: false)
+            .length,
         1,
       );
+    });
+
+    test("getRelationsBetween does not duplicate self-loop", () {
+      final rel = Relation(
+        type: "Self",
+        fromNodeId: node1.id,
+        toNodeId: node1.id,
+        properties: {"label": "self"},
+        labelProperty: "label",
+      );
+      graph.addRelation(rel);
+
+      final relations = graph
+          .getRelationsBetween(node1.id, node1.id, bothDirections: true)
+          .toList(growable: false);
+
+      expect(relations, hasLength(1));
+      expect(relations.single.id, rel.id);
     });
 
     // --- clear ---
@@ -434,7 +482,8 @@ void main() {
       expect(graph.allRelations().length, 0);
     });
 
-    test("getRelationsFrom returns empty for node with no outgoing relations", () {
+    test("getRelationsFrom returns empty for node with no outgoing relations",
+        () {
       graph.addNode(node1);
       graph.addNode(node2);
       final rel = Relation(
@@ -448,7 +497,8 @@ void main() {
       expect(graph.getRelationsFrom(node2.id).length, 0);
     });
 
-    test("getRelationsTo returns empty for node with no incoming relations", () {
+    test("getRelationsTo returns empty for node with no incoming relations",
+        () {
       graph.addNode(node1);
       graph.addNode(node2);
       final rel = Relation(

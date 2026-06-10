@@ -1,3 +1,12 @@
+## 0.5.0
+
+* Added `nodeIsOrphan` and `nodeIsNotOrphan` helpers for disconnected nodes
+* Fixed `nodeIsLeaf` so orphan nodes are not reported as leaves
+* Fixed `replaceIfExists: false` handling for nodes and relations
+* Made SQLite node and relation writes transactional
+* Fixed duplicate self-loop results in `getRelationsBetween`
+* Improved SQLite persistence and graph behavior test coverage
+
 ## 0.4.0
 
 * Added `SqliteGraph` — a persistent graph implementation backed by SQLite with support for nodes, relations, and key-value properties

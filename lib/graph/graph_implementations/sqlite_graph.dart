@@ -88,8 +88,7 @@ class SqliteGraph extends Graph {
     );
     final properties = <String, dynamic>{};
     for (final row in rows) {
-      properties[row['key'] as String] =
-          jsonDecode(row['value'] as String);
+      properties[row['key'] as String] = jsonDecode(row['value'] as String);
     }
     return properties;
   }
@@ -101,8 +100,7 @@ class SqliteGraph extends Graph {
     );
     final properties = <String, dynamic>{};
     for (final row in rows) {
-      properties[row['key'] as String] =
-          jsonDecode(row['value'] as String);
+      properties[row['key'] as String] = jsonDecode(row['value'] as String);
     }
     return properties;
   }
@@ -116,12 +114,24 @@ class SqliteGraph extends Graph {
     }
   }
 
-  void _saveRelationProperties(String relationId, Map<String, dynamic> properties) {
+  void _saveRelationProperties(
+      String relationId, Map<String, dynamic> properties) {
     for (final entry in properties.entries) {
       _db.execute(
         'INSERT OR REPLACE INTO relation_properties (relationId, key, value) VALUES (?, ?, ?)',
         [relationId, entry.key, jsonEncode(entry.value)],
       );
+    }
+  }
+
+  void _transaction(void Function() action) {
+    _db.execute('BEGIN TRANSACTION');
+    try {
+      action();
+      _db.execute('COMMIT');
+    } catch (_) {
+      _db.execute('ROLLBACK');
+      rethrow;
     }
   }
 
@@ -160,37 +170,47 @@ class SqliteGraph extends Graph {
 
   @override
   void addNode(Node node, {bool replaceIfExists = true}) {
-    final row = _nodeToRow(node);
-    if (replaceIfExists) {
-      _db.execute('DELETE FROM nodes WHERE id = ?', [node.id]);
-      _db.execute('DELETE FROM node_properties WHERE nodeId = ?', [node.id]);
+    if (!replaceIfExists && nodeExists(node.id)) {
+      return;
     }
-    _db.execute(
-      'INSERT INTO nodes '
-      '(id, type, labelProperty, uniqueProperty, urlProperty, icon) '
-      'VALUES (?, ?, ?, ?, ?, ?)',
-      row,
-    );
-    _saveNodeProperties(node.id, node.properties);
+    final row = _nodeToRow(node);
+    _transaction(() {
+      if (replaceIfExists) {
+        _db.execute('DELETE FROM nodes WHERE id = ?', [node.id]);
+        _db.execute('DELETE FROM node_properties WHERE nodeId = ?', [node.id]);
+      }
+      _db.execute(
+        'INSERT INTO nodes '
+        '(id, type, labelProperty, uniqueProperty, urlProperty, icon) '
+        'VALUES (?, ?, ?, ?, ?, ?)',
+        row,
+      );
+      _saveNodeProperties(node.id, node.properties);
+    });
   }
 
   @override
   void addRelation(Relation relation, {bool replaceIfExists = true}) {
-    final row = _relationToRow(relation);
-    if (replaceIfExists) {
-      _db.execute('DELETE FROM relations WHERE id = ?', [relation.id]);
-      _db.execute(
-        'DELETE FROM relation_properties WHERE relationId = ?',
-        [relation.id],
-      );
+    if (!replaceIfExists && relationExists(relation.id)) {
+      return;
     }
-    _db.execute(
-      'INSERT INTO relations '
-      '(id, type, fromNodeId, toNodeId, labelProperty) '
-      'VALUES (?, ?, ?, ?, ?)',
-      row,
-    );
-    _saveRelationProperties(relation.id, relation.properties);
+    final row = _relationToRow(relation);
+    _transaction(() {
+      if (replaceIfExists) {
+        _db.execute('DELETE FROM relations WHERE id = ?', [relation.id]);
+        _db.execute(
+          'DELETE FROM relation_properties WHERE relationId = ?',
+          [relation.id],
+        );
+      }
+      _db.execute(
+        'INSERT INTO relations '
+        '(id, type, fromNodeId, toNodeId, labelProperty) '
+        'VALUES (?, ?, ?, ?, ?)',
+        row,
+      );
+      _saveRelationProperties(relation.id, relation.properties);
+    });
   }
 
   @override
@@ -293,11 +313,17 @@ class SqliteGraph extends Graph {
 
   @override
   bool nodeIsLeaf(String nodeId) {
-    return _select(
+    final hasIncoming = _select(
+      'relations',
+      where: 'toNodeId = ?',
+      whereArgs: [nodeId],
+    ).isNotEmpty;
+    final hasOutgoing = _select(
       'relations',
       where: 'fromNodeId = ?',
       whereArgs: [nodeId],
-    ).isEmpty;
+    ).isNotEmpty;
+    return hasIncoming && !hasOutgoing;
   }
 
   @override
@@ -325,6 +351,9 @@ class SqliteGraph extends Graph {
     ).toList(growable: false);
 
     if (bothDirections) {
+      if (fromNodeId == toNodeId) {
+        return side1;
+      }
       final side2 = _mapRelations(
         _select(
           'relations',

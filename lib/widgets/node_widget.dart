@@ -1,16 +1,37 @@
 import 'package:flutter/material.dart';
 
+/// A widget representing a node in the graph.
+/// 
+/// It is positioned according to [rect] and handles interactive events
+/// like taps, secondary taps, long presses, and panning.
 class NodeWidget extends StatefulWidget {
+  /// The bounding box where the node should be positioned and sized.
   final Rect rect;
+
+  /// The icon displayed within the node.
   final IconData icon;
+
+  /// The label widget displayed next to the icon.
   final Widget label;
+
+  /// Callback invoked when the node is pressed (left click).
   final VoidCallback? onPressed;
+
+  /// Callback invoked when the node is secondary tapped (right click).
   final VoidCallback? onSecondaryTap;
+
+  /// Callback invoked when the node is long pressed.
   final VoidCallback? onLongPress;
+
+  /// Callback invoked when the node is dragged.
   final Function(DragUpdateDetails) onPanUpdate;
+
+  /// The background color of the node's button.
   final Color backgroundColor;
 
+  /// Creates a [NodeWidget].
   const NodeWidget({
+
     super.key,
     required this.rect,
     required this.icon,

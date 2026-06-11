@@ -9,13 +9,24 @@ import 'graph_controller.dart';
 
 typedef NodeActionCallback = void Function(Node node);
 
-/// GraphView widget allows displaying and managing nodes and relations
-/// on a graph.
+/// A widget that displays and manages a graph of nodes and relations.
+///
+/// Provides interactive visualization including panning, zooming (via
+/// [InteractiveViewer]), node expansion/collapse, and dragging.
 class GraphWidget extends StatefulWidget {
+  /// The controller managing graph data and state.
   final GraphController controller;
+
+  /// Callback invoked when the node is tapped with a secondary gesture.
   final NodeActionCallback onNodeSecondaryTap;
+
+  /// Callback invoked when a node is long-pressed.
   final NodeActionCallback onNodeLongPress;
 
+  /// Creates a [GraphWidget].
+  ///
+  /// [controller] must not be null. [onNodeSecondaryTap] and
+  /// [onNodeLongPress] must not be null.
   const GraphWidget({
     super.key,
     required this.controller,
@@ -23,10 +34,12 @@ class GraphWidget extends StatefulWidget {
     required this.onNodeLongPress,
   });
 
+  /// Creates the state for a [GraphWidget].
   @override
   State<GraphWidget> createState() => _GraphWidgetState();
 }
 
+/// The state for a [GraphWidget].
 class _GraphWidgetState extends State<GraphWidget> {
   @override
   void initState() {
@@ -36,11 +49,13 @@ class _GraphWidgetState extends State<GraphWidget> {
     widget.controller.addListener(() => setState(() {}));
   }
 
+  /// Disposes the state.
   @override
   void dispose() {
     super.dispose();
   }
 
+  /// Builds the graph visualization tree.
   @override
   Widget build(BuildContext context) {
     final ctl = widget.controller;
@@ -48,9 +63,7 @@ class _GraphWidgetState extends State<GraphWidget> {
     final nodeWidgets = ctl.displayedNodes().map<Widget>((node) {
       var nodeColor = Colors.blueGrey;
 
-      if (ctl
-          .getRelationsFrom(node.id)
-          .isNotEmpty) {
+      if (ctl.getRelationsFrom(node.id).isNotEmpty) {
         nodeColor = Colors.lightGreen;
       }
 
@@ -124,8 +137,8 @@ class _GraphWidgetState extends State<GraphWidget> {
                 ctl.getNodeRect(e.toNodeId)!.center,
               ) ==
                   TextDirection.leftToRight
-                  ? "${e.label} 🢂"
-                  : "🢀 ${e.label}",
+                  ? "${e.label} \uD83D\uDDD2"
+                  : "\uD83D\uDDC0 ${e.label}",
               softWrap: false,
               overflow: TextOverflow.visible,
               style: const TextStyle(),

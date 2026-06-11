@@ -113,7 +113,7 @@ class GraphController extends ChangeNotifier {
   /// Returns whether [nodeId] has outgoing relations.
   bool nodeIsNotLeaf(String nodeId) => !nodeIsLeaf(nodeId);
 
-  /// Returns whether [nodeId] has outgoing relations (i.e., children).
+  /// Returns whether [nodeId] has outgoing relations.
   bool nodeIsConnected(String nodeId) {
     return _graph.nodeIsConnected(nodeId);
   }
@@ -131,18 +131,18 @@ class GraphController extends ChangeNotifier {
   /// Saves the current graph as a JSON string.
   ///
   /// Not yet implemented. Throws [UnimplementedError].
-  void saveGraph(String graphJson) {
+  String saveGraph() {
     throw UnimplementedError();
   }
 
-  /// Returns whether [nodeId] has child relations (i.e., is expandable).
+  /// Returns whether [nodeId] has relations starting from it
   bool nodeIsExpanded(String nodeId) {
     return _graph
         .getRelationsFrom(nodeId)
         .isNotEmpty;
   }
 
-  /// Returns whether [nodeId] has no child relations.
+  /// Opposite of nodeIsExpanded.
   bool nodeIsNotExpanded(String nodeId) => !nodeIsExpanded(nodeId);
 
   /// Collapses the node identified by [nodeId], hiding all its descendants.
